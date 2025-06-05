@@ -15,7 +15,7 @@ const db = mysql.createConnection({
   password: "root",
 });
 
-// ✅ Create Database If Not Exists
+// ✅ Create Database If Not Exists and start the server when ready
 db.query("CREATE DATABASE IF NOT EXISTS crud_app", (err) => {
   if (err) throw err;
   console.log("✅ Database 'crud_app' is ready!");
@@ -36,6 +36,11 @@ db.query("CREATE DATABASE IF NOT EXISTS crud_app", (err) => {
     db.query(createTableQuery, (err) => {
       if (err) throw err;
       console.log("✅ Table 'users' is ready!");
+
+      // ✅ Start Server after DB is ready
+      app.listen(PORT, () =>
+        console.log(`🚀 Server running on http://localhost:${PORT}`)
+      );
     });
   });
 });
@@ -92,8 +97,3 @@ app.delete("/users/:id", (req, res) => {
     res.json({ message: "User deleted" });
   });
 });
-
-// ✅ Start Server
-app.listen(PORT, () =>
-  console.log(`🚀 Server running on http://localhost:${PORT}`)
-);
